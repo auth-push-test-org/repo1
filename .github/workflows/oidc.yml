@@ -1,0 +1,163 @@
+1# This is a basic workflow to help you get started with Actions
+
+name: CI-OIDC-MSDO-SIM_AD_v2
+
+# Controls when the workflow will run 
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+env:
+  MSDO_FILEPATH: "D:\\a\\repo1\\repo1\\secintdevtest\\gdn\\tools\\Microsoft.Guardian.Cli.exe"
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Get OIDC token and set OIDC_TOKEN environment variable 
+        run: | 
+          $OIDC_TOKEN = Invoke-RestMethod -Headers @{"Authorization"="bearer $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN"; "Accept"="application/json; api-version=2.0"} -Uri "$env:ACTIONS_ID_TOKEN_REQUEST_URL&audience=dfd" | Select-Object -ExpandProperty value  
+          Write-Host "$env:ACTIONS_ID_TOKEN_REQUEST_URL"
+          Write-Host "$OIDC_TOKEN"
+          $StringMsg = "$OIDC_TOKEN"
+          $Bytes = [System.Text.Encoding]::Unicode.GetBytes($StringMsg)
+          $EncodedString = [Convert]::ToBase64String($Bytes)
+          Write-Host "Encoded String: " $EncodedString
+      
+       
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        shell: pwsh
+        run: |
+          Install-Module -Name Az.Storage -Scope CurrentUser -Repository PSGallery -Force -AllowClobber
+          Write-Host "Install module completed"
+          $env:GDN_STORAGEFOLDER = "amarnatv"
+          # Check for and copy binaries to local folders and set environment variables for later.
+          $TargetFolderPath = Get-Location
+          $basePath = Join-Path $TargetFolderPath "secintdevtest"
+          write-host "$TargetFolderPath"
+          write-host "$basePath"
+          $env:MSDO_FILEPATH = $(Join-Path $basePath "gdn")
+  
+          $env:GDN_FILEPATH= $(Join-Path $basePath "gdn")
+  
+          write-host $env:MSDO_FILEPATH
+          write-host $env:GDN_FILEPATH
+  
+          function Invoke-Sudo { 
+              & /usr/bin/env sudo pwsh -command "& $args" 
+          }
+  
+          write-host "*** Setup for Testing **"
+          #if (-not $IsWindows -and -not $IsLinux) {
+          #    $IsWindows = -not ([string]::IsNullOrEmpty($env:OS))
+          #}
+  
+          #$basePath = if ($IsWindows)
+          #{
+          #    $env:Agent_RootDirectory
+          #}
+          #else
+          #{
+          #    $env:AGENT_WORKFOLDER
+          #}
+  
+          #$basePath = Join-Path $basePath "secintdevtest"
+  
+          # https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-authorize-azure-active-directory#authorize-a-service-principal
+          $env:AZCOPY_AUTO_LOGIN_TYPE = "SPN"
+          $env:AZCOPY_SPA_APPLICATION_ID = "3a210a41-7b51-4822-b012-9ba6f6e444cf"
+          $env:AZCOPY_TENANT_ID = "dad46ef7-083d-488a-bd4b-8926fc7f83a1"    # microsoft.onmicrosoft.com, corporate tenant
+          $env:AZCOPY_SPA_CLIENT_SECRET="${{secrets.APPSECRET}}"
+  
+          write-host "AppId - $env:AZCOPY_SPA_APPLICATION_ID"
+          write-host "TenantId - $env:AZCOPY_TENANT_ID"
+  
+          write-host "Completed setting AzCopy variables"
+          # old way: azcopy login --service-principal --application-id "b923f114-da07-44b2-acfc-b33984c2adbd"
+  
+          if (-not [string]::IsNullOrWhitespace($env:GDN_STORAGEFOLDER))
+          {
+              write-host "Starting the copy"
+              azcopy copy $("https://secintdevadostorage1.blob.core.windows.net/pipelinetesting/" + $env:GDN_STORAGEFOLDER.replace('\','/') + "/*") $(Join-Path $basePath "gdn") --preserve-smb-info=true --recursive=true
+              write-host "Completed the copy"
+
+              #workaround for belw if
+              $env:GDN_FILEPATH = "$(Join-Path $basePath 'gdn/tools/Microsoft.Guardian.Cli.exe')"
+              $env:MSDO_FILEPATH = "$(Join-Path $basePath 'gdn/tools/Microsoft.Guardian.Cli.exe')"
+              
+              if ($IsWindows)
+              {
+                write-host "INSIDE WINDOWS-----------"
+                $env:GDN_FILEPATH = "$(Join-Path $basePath 'gdn/tools/Microsoft.Guardian.Cli.exe')"
+                $env:MSDO_FILEPATH = "$(Join-Path $basePath 'gdn/tools/Microsoft.Guardian.Cli.exe')"
+                write-host $env:GDN_FILEPATH
+                write-host $env:MSDO_FILEPATH
+              }
+              else
+              {
+                $gdnPath = Join-Path $basePath 'gdn/tools/Microsoft.Guardian.Cli'
+                Write-Host "##vso[task.setvariable variable=GDN_FILEPATH;]$gdnPath"
+                Invoke-Sudo "chmod +x $gdnPath"
+              }
+          }
+  
+          write-host "existed copy block"
+  
+          if (-not [string]::IsNullOrWhitespace($env:PKGSRC_STORAGEFOLDER))
+          {
+              $dest = Join-Path $basePath "pkgsrc"
+              azcopy copy $("https://secintdevadostorage.blob.core.windows.net/pipelinetesting/" + $env:PKGSRC_STORAGEFOLDER.replace('\','/') + "/*") $dest --preserve-smb-info=true --recursive=true
+  
+              $env:GDN_PACKAGE_SOURCE ="$dest"
+          }
+
+          $env:MSDO_FOLDERPATH = "$(Join-Path $basePath 'gdn/tools')"
+           write-host "$env:MSDO_FOLDERPATH"
+           write-host "COMPLETED-----------"
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: dir $env:MSDO_FOLDERPATH -r
+  
+      - name: security-devops-action
+        uses: microsoft/security-devops-action@v1.10.0
+        with:
+          # The command to run. Defaults to run.
+          command: run # optional, default is all
+          # A comma separated list of analyzer to run. Example bandit, binskim, container-mapping, eslint, templateanalyzer, terrascan, trivy.
+          tools: trivy # optional
+        env:
+          #SYSTEM_ACCESSTOKEN: $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN
+          DfdBackendServiceEnvironment: "PPE"
+          
+      # Runs a set of commands using the runners shell
+#      - name: Run a multi-line script
+#        shell: pwsh
+#        run: |
+#          # Create a dictionary for the headers
+#          $headers = New-Object 'System.Collections.Generic.Dictionary[[String],[String]]'
+#          $headers.Add('Content-Type', 'application/json')
+#          # Your other parameters (URI, body, etc.)
+#          $uri = 'https://dfdinfra-afdendpoint-dogfood-dqgpa4gjagh0arcw.z01.azurefd.net/GitHub/v1/auth-push/PublishScanMetadata'
+#          $body = '{"key1":"value1", "key2":"value2"}'
+#          # Make the POST request
+#          Invoke-RestMethod -Uri $uri -Method Post -Headers $headers -Body $body
