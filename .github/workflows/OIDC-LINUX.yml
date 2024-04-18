@@ -32,7 +32,6 @@ jobs:
           # A comma separated list of analyzer to run. Example bandit, binskim, container-mapping, eslint, templateanalyzer, terrascan, trivy.
           tools: trivy # optional
         env:
-          #SYSTEM_ACCESSTOKEN: $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN
           DfdBackendServiceEnvironment: "PPE"
           
       # Runs a set of commands using the runners shell
