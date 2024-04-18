@@ -18,7 +18,6 @@ jobs:
     # The type of runner that the job will run on
     runs-on: windows-latest
     permissions:
-      #contents: read
       id-token: write
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -31,18 +30,4 @@ jobs:
           command: run # optional, default is all
           # A comma separated list of analyzer to run. Example bandit, binskim, container-mapping, eslint, templateanalyzer, terrascan, trivy.
         env:
-          #SYSTEM_ACCESSTOKEN: $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN
           DfdBackendServiceEnvironment: "PPE"
-          
-      # Runs a set of commands using the runners shell
-#      - name: Run a multi-line script
-#        shell: pwsh
-#        run: |
-#          # Create a dictionary for the headers
-#          $headers = New-Object 'System.Collections.Generic.Dictionary[[String],[String]]'
-#          $headers.Add('Content-Type', 'application/json')
-#          # Your other parameters (URI, body, etc.)
-#          $uri = 'https://dfdinfra-afdendpoint-dogfood-dqgpa4gjagh0arcw.z01.azurefd.net/GitHub/v1/auth-push/PublishScanMetadata'
-#          $body = '{"key1":"value1", "key2":"value2"}'
-#          # Make the POST request
-#          Invoke-RestMethod -Uri $uri -Method Post -Headers $headers -Body $body
