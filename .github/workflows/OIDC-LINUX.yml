@@ -32,4 +32,4 @@ jobs:
           #tools: trivy # , bandit, binskim #, container-mapping, eslint, templateanalyzer, terrascan
         env:
           DfdBackendServiceEnvironment: "PPE"
-          MSDO_VERSION: '0.200.0'
+          #MSDO_VERSION: '0.200.0'
