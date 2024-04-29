@@ -30,6 +30,6 @@ jobs:
           command: run # optional, default is all
           # A comma separated list of analyzer to run. Example bandit, binskim, container-mapping, eslint, templateanalyzer, terrascan, trivy.
           tools: trivy # , bandit, binskim #, container-mapping, eslint, templateanalyzer, terrascan
-        env:
-          DfdBackendServiceEnvironment: "PPE"
+        #env:
+          #DfdBackendServiceEnvironment: "PPE"
           #MSDO_VERSION: '0.200.0'
