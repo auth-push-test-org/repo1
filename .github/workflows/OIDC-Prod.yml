@@ -24,7 +24,7 @@ jobs:
     steps:
       
       - name: security-devops-action
-        uses: microsoft/security-devops-action@v1.10.0
+        uses: microsoft/security-devops-action@main
         with:
           # The command to run. Defaults to run.
           command: run # optional, default is all
