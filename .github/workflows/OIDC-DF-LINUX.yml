@@ -23,14 +23,19 @@ jobs:
       packages: write
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+    
+      # checkout your code repository to scan
+      - uses: actions/checkout@v3
       
       - name: security-devops-action
-        uses: microsoft/security-devops-action@v1.10.0
+        uses: microsoft/security-devops-action@latest
+        id: msdo
         with:
           # The command to run. Defaults to run.
           command: run # optional, default is all
           # A comma separated list of analyzer to run. Example bandit, binskim, container-mapping, eslint, templateanalyzer, terrascan, trivy.
-          tools: trivy, checkov #, bandit, binskim #, container-mapping, eslint, templateanalyzer, terrascan
+          tools: 'trivy, credscan, checkov' #, bandit, binskim #, container-mapping, eslint, templateanalyzer, terrascan
         env:
           DfdBackendServiceEnvironment: "PPE"
+          GDN_RUN_BLAME: true
           #MSDO_VERSION: '0.200.0'
