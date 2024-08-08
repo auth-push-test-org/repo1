@@ -22,7 +22,6 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      
       - name: security-devops-action
         uses: microsoft/security-devops-action@v1.10.0
         with:
@@ -33,3 +32,12 @@ jobs:
         #env:
           #DfdBackendServiceEnvironment: "PPE"
           #MSDO_VERSION: '0.200.0'
+
+      - name: msdo-fetch-setup-test
+        shell: bash
+        run: |
+          curl -L -o ./msdo_linux.zip https://aka.ms/get-msdo-linux-pushtoken-test
+          unzip ./msdo_linux.zip
+          chmod +x tools/guardian
+          chmod +x tools/Microsoft.Guardian.Cli
+          ls -lah .
