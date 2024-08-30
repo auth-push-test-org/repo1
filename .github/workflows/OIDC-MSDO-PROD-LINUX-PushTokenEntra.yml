@@ -29,16 +29,9 @@ jobs:
           command: run # optional, default is all
           # A comma separated list of analyzer to run. Example bandit, binskim, container-mapping, eslint, templateanalyzer, terrascan, trivy.
           tools: trivy # , bandit, binskim #, container-mapping, eslint, templateanalyzer, terrascan
-        #env:
-          #DfdBackendServiceEnvironment: "PPE"
+        env:
+          DfdBackendServiceEnvironment: "PPE"
           #MSDO_VERSION: '0.200.0'
-
-      - name: fetch-and-do-msdo-test
-        shell: bash
-        run: |
-          curl -L -o ./msdo_linux.zip https://aka.ms/get-msdo-linux-pushtoken-test
-          unzip ./msdo_linux.zip
-          chmod +x tools/guardian
-          chmod +x tools/Microsoft.Guardian.Cli
-          ls -lah .
-          tools/guardian upload -f ./ubuntu.sarif
+          GDN_PUSH_TOKEN_TENANT_ID: ${{ secrets.DfdEntraTenantId }}
+          GDN_PUSH_TOKEN_CLIENT_ID: ${{ secrets.DfdEntraClientId }}
+          GDN_PUSH_TOKEN_CLIENT_SECRET: ${{ secrets.DfdEntraClientSecret }}
