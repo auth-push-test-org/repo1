@@ -1,4 +1,4 @@
-name: OIDC-MSDO-PROD-LINUX-AuthPush
+name: OIDC-MSDO-PROD-LINUX-PushTokenEntra
 
 # Controls when the workflow will run 
 on:
@@ -22,16 +22,28 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: security-devops-action
-        uses: microsoft/security-devops-action@v1.10.0
-        with:
-          # The command to run. Defaults to run.
-          command: run # optional, default is all
-          # A comma separated list of analyzer to run. Example bandit, binskim, container-mapping, eslint, templateanalyzer, terrascan, trivy.
-          tools: trivy # , bandit, binskim #, container-mapping, eslint, templateanalyzer, terrascan
+      # - name: security-devops-action
+      #   uses: microsoft/security-devops-action@v1.10.0
+      #   with:
+      #     # The command to run. Defaults to run.
+      #     command: run # optional, default is all
+      #     # A comma separated list of analyzer to run. Example bandit, binskim, container-mapping, eslint, templateanalyzer, terrascan, trivy.
+      #     tools: trivy # , bandit, binskim #, container-mapping, eslint, templateanalyzer, terrascan
+      #   env:
+      #     DfdBackendServiceEnvironment: "PPE"
+      #     #MSDO_VERSION: '0.200.0'
+
+      - name: fetch-and-do-msdo-test
+        shell: bash
         env:
           DfdBackendServiceEnvironment: "PPE"
-          #MSDO_VERSION: '0.200.0'
           GDN_PUSH_TOKEN_TENANT_ID: ${{ secrets.DfdEntraTenantId }}
           GDN_PUSH_TOKEN_CLIENT_ID: ${{ secrets.DfdEntraClientId }}
           GDN_PUSH_TOKEN_CLIENT_SECRET: ${{ secrets.DfdEntraClientSecret }}
+        run: |
+          curl -L -o ./msdo_linux.zip https://aka.ms/get-msdo-linux-pushtoken-test
+          unzip ./msdo_linux.zip
+          chmod +x tools/guardian
+          chmod +x tools/Microsoft.Guardian.Cli
+          ls -lah .
+          tools/guardian run -t trivy
