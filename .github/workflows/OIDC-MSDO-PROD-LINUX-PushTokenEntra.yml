@@ -47,4 +47,4 @@ jobs:
           chmod +x tools/Microsoft.Guardian.Cli
           ls -lah .
           tools/guardian init --force
-          tools/guardian run -t trivy
+          tools/guardian run -t trivy --export-file ./ubuntu-test.sarif --publish-file-folder-path ./ubuntu-test.sarif
