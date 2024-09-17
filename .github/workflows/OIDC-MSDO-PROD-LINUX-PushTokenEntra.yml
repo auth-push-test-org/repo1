@@ -41,7 +41,7 @@ jobs:
           GDN_PUSH_TOKEN_CLIENT_ID: ${{ secrets.DfdEntraClientId }}
           GDN_PUSH_TOKEN_CLIENT_SECRET: ${{ secrets.DfdEntraClientSecret }}
         run: |
-          curl -L -o ./msdo_linux.zip https://www.nuget.org/api/v2/package/Microsoft.Security.DevOps.Cli.win-x64/
+          curl -L -o ./msdo_linux.zip https://www.nuget.org/api/v2/package/Microsoft.Security.DevOps.Cli.linux-x64/
           unzip ./msdo_linux.zip
           chmod +x tools/guardian
           chmod +x tools/Microsoft.Guardian.Cli
