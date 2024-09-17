@@ -36,7 +36,7 @@ jobs:
       - name: fetch-and-do-msdo-test
         shell: bash
         env:
-          # DfdBackendServiceEnvironment: "Prod"
+          DfdBackendServiceEnvironment: "PPE"
           GDN_PUSH_TOKEN_TENANT_ID: ${{ secrets.DfdEntraTenantId }}
           GDN_PUSH_TOKEN_CLIENT_ID: ${{ secrets.DfdEntraClientId }}
           GDN_PUSH_TOKEN_CLIENT_SECRET: ${{ secrets.DfdEntraClientSecret }}
