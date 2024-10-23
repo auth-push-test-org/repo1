@@ -1,4 +1,4 @@
-name: OIDC-MSDO-PROD-LINUX-PushTokenEntra
+name: OIDC-MSDO-PPE-LINUX-PushTokenEntra
 
 # Controls when the workflow will run 
 on:
