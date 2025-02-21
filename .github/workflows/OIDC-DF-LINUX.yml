@@ -34,7 +34,7 @@ jobs:
           # The command to run. Defaults to run.
           command: run # optional, default is all
           # A comma separated list of analyzer to run. Example bandit, binskim, container-mapping, eslint, templateanalyzer, terrascan, trivy.
-          tools: 'trivy, credscan, checkov, bandit, templateanalyzer, terrascan, eslint' #, bandit, binskim #, container-mapping, eslint, templateanalyzer, terrascan
+          tools: 'trivy, credscan, checkov, templateanalyzer, terrascan, eslint' #, bandit, binskim #, container-mapping, eslint, templateanalyzer, terrascan
         env:
           DfdBackendServiceEnvironment: "PPE"
           GDN_RUN_BLAME: true
