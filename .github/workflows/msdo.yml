@@ -11,6 +11,7 @@ on:
 permissions:
   id-token: write # This is required for federation to Defender for DevOps
   security-events: write # This is required to upload SARIF files
+  contents: read
 
 jobs:
   sample:
@@ -24,7 +25,7 @@ jobs:
     steps:
       
       # Checkout your code repository to scan
-    #  - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
       # Run analyzers
     - name: Run Microsoft Security DevOps Analysis
