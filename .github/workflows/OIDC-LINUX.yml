@@ -8,7 +8,7 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    - cron: '0 0 * * *' # This runs the workflow every day at midnight UTC
+    - cron: '*/30 * * * *' # This runs the workflow every day at midnight UTC
 
 
 
