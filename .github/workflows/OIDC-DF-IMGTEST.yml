@@ -1,4 +1,4 @@
-name: OIDC-MSDO-DF-LINUX
+name: OIDC-MSDO-DF-LINUX-IMG-TEST
 
 # Controls when the workflow will run 
 on:
