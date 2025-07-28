@@ -11,32 +11,21 @@ on:
   schedule:
     - cron: '*/30 * * * *' # This runs the workflow every day at midnight UTC
 
-
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
-      contents: read
       id-token: write
-      packages: write
 
     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      - uses: actions/checkout@v3
-      
+    steps:      
       - name: security-devops-action
-        uses: microsoft/security-devops-action@latest
-        id: msdo
+        uses: microsoft/security-devops-action@v1.10.0
         with:
           # The command to run. Defaults to run.
           command: run # optional, default is all
           # A comma separated list of analyzer to run. Example bandit, binskim, container-mapping, eslint, templateanalyzer, terrascan, trivy.
-          tools: 'trivy, credscan, checkov, templateanalyzer, terrascan, eslint' #, bandit, binskim #, container-mapping, eslint, templateanalyzer, terrascan
-        env:
-          # DfdBackendServiceEnvironment: "PPE"
-          GDN_RUN_BLAME: true
-          #MSDO_VERSION: '0.200.0'
+          tools: 'trivy' #, credscan, checkov, templateanalyzer, terrascan, eslint' #, bandit, binskim #, container-mapping, eslint, templateanalyzer, terrascan
