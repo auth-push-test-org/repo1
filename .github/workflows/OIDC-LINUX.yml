@@ -9,7 +9,7 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
   schedule:
-    - cron: '*/30 * * * *' # This runs the workflow every day at midnight UTC
+    - cron: '*/30 * * * *' # This runs the workflow every 30 minutes.
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -28,4 +28,4 @@ jobs:
           # The command to run. Defaults to run.
           command: run # optional, default is all
           # A comma separated list of analyzer to run. Example bandit, binskim, container-mapping, eslint, templateanalyzer, terrascan, trivy.
-          tools: 'trivy' #, credscan, checkov, templateanalyzer, terrascan, eslint' #, bandit, binskim #, container-mapping, eslint, templateanalyzer, terrascan
+          tools: 'trivy' # please do not add more tools here, if you have to, please remove it once testing is done as this action runs every 30 minutes
