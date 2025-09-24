@@ -18,9 +18,9 @@ jobs:
     - name: Build the Docker image
       # run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
       run: |
-        echo ${{GITHUB_SERVER_URL}}
-        echo ${{GITHUB_REPOSITORY}}
-        echo ${{GITHUB_ACTOR}}
-        echo ${{GITHUB_REF_NAME}}
-        echo ${{GITHUB_SHA}}
+        echo ${{github.server_url}}
+        echo ${{github.repository}}
+        echo ${{github.actor}}
+        echo ${{github.ref_name}}
+        echo ${{github.sha}}
         
