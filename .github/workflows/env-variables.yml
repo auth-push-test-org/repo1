@@ -18,8 +18,12 @@ jobs:
     - name: Build the Docker image
       # run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
       run: |
-        echo "$GITHUB_REPOSITORY"
-        echo "$GITHUB_REF" 
+        echo ${{github.action}}
+        echo ${{github.job}}
+        echo ${{github.workflow}}
+        echo ${{github.repositoryUrl}}
+        echo ${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}
+        echo ${{github.triggering_actor}}
         echo ${{github.server_url}}
         echo ${{github.repository}}
         echo ${{github.actor}}
