@@ -20,7 +20,6 @@ jobs:
       run: |
         echo ${{vars.GITHUB_SERVER_URL}}
         echo ${{vars.GITHUB_REPOSITORY}}
-        # echo ${{GITHUB_SERVER_URL}}/${{GITHUB_REPOSITORY}}/actions/runs/${{GITHUB_RUN_ID}}
         echo ${{vars.GITHUB_ACTOR}}
         echo ${{vars.GITHUB_REF_NAME}}
         echo ${{vars.GITHUB_SHA}}
