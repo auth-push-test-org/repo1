@@ -56,7 +56,7 @@ steps:
   displayName: 'Run the new CLI'
   env:
     SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-    DfdBackendServiceEnvironment: PPE
+    DfdBackendServiceEnvironment: PPEE
 
 # - task: PublishBuildArtifacts@1
 #   displayName: "Publish CLI Base64 token"
